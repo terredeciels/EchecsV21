@@ -50,9 +50,9 @@ public class PerftSpeed {
         board.gen();
         List<Move> moves = board.pseudomoves;
         for (Move move : moves) {
-            if (board.makemove(move)) {
+            if (move.makemove(board)) {
                 PerftResult subPerft = perft(new Board(board), depth - 1);
-                board.takeback();
+                board.um.takeback(board);
                 result.moveCount += subPerft.moveCount;
             }
         }
