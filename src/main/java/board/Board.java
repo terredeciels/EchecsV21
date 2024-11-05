@@ -3,6 +3,7 @@ package board;
 import java.util.ArrayList;
 import java.util.List;
 
+import static board.ChessUtils.*;
 import static java.lang.System.arraycopy;
 import static java.util.stream.IntStream.range;
 
@@ -12,7 +13,6 @@ public class Board implements Constants {
     public int[] color = new int[BOARD_SIZE];
     public int[] piece = new int[BOARD_SIZE];
 
-    public Piece[] pieces = new Piece[BOARD_SIZE];
     public int side;
     public int xside;
     public int castle;
@@ -26,7 +26,6 @@ public class Board implements Constants {
     public Roi roi;
 
     public Board() {
-        initPieces();
         pion = new Pion(this);
         roi = new Roi(this);
     }
@@ -45,51 +44,47 @@ public class Board implements Constants {
         roi = new Roi(this);
     }
 
-    private void initPieces() {
-        for (int c = 0; c < BOARD_SIZE; c++) {
-            pieces[c] = new Piece();
-        }
-    }
-
     public void gen() {
-        range(0, BOARD_SIZE)
-                .filter(c -> color[c] == side)
-                .forEach(c -> {
-                    if (piece[c] == PAWN) pion.gen_pawn(c);
-                    else gen(c);
-                });
+        range(0, BOARD_SIZE).filter(square -> color[square] == side).forEach(square -> {
+            if (piece[square] == PAWN) {
+                pion.gen_pawn(square);
+            } else {
+                generatePieceMoves(square);
+            }
+        });
         roi.gen_castles();
         pion.gen_enpassant();
     }
 
-//    private void gen_castles() {
-//        roi.gen_castles();
-//    }
-
-    private void gen(int c) {
-        int p = piece[c];
-        for (int d = 0; d < offsets[p]; ++d) {
-            int _c = c;
-            while (true) {
-                _c = mailbox[mailbox64[_c] + offset[p][d]];
-                if (_c == -1) break;
-                if (color[_c] != EMPTY) {
-                    if (color[_c] == xside) gen_push(c, _c, 1);
-                    break;
-                }
-                gen_push(c, _c, 0);
-                if (!slide[p]) break;
-            }
+    private void generatePieceMoves(int square) {
+        int pieceType = piece[square];
+        for (int direction = 0; direction < offsets[pieceType]; ++direction) {
+            generateMovesInDirection(square, pieceType, direction);
         }
     }
 
-    public void gen_push(int from, int to, int bits) {
+    private void generateMovesInDirection(int square, int pieceType, int direction) {
+        int currentSquare = square;
+        while (true) {
+            currentSquare = mailbox[mailbox64[currentSquare] + offset[pieceType][direction]];
+            if (isOutOfBounds(currentSquare)) break;
+            if (isOccupied(color, currentSquare)) {
+                if (isOpponentPiece(color, xside, currentSquare)) {
+                    addMove(square, currentSquare, 1);
+                }
+                break;
+            }
+            addMove(square, currentSquare, 0);
+            if (!slide[pieceType]) break;
+        }
+    }
+
+    public void addMove(int from, int to, int bits) {
         if ((bits & 16) != 0 && (side == LIGHT ? to <= H8 : to >= A1)) {
             pion.gen_promote(from, to, bits);
-            return;
+        } else {
+            pseudomoves.add(new Move((byte) from, (byte) to, (byte) 0, (byte) bits));
         }
-        pseudomoves.add(new Move((byte) from, (byte) to, (byte) 0, (byte) bits));
     }
-
 }
 

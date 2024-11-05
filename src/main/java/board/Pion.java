@@ -11,13 +11,13 @@ class Pion {
         final int offset = (board.side == Constants.LIGHT) ? -8 : 8;
         final int oppositeColor = board.side ^ 1;
 
-        if ((c & 7) != 0 && board.color[c + offset - 1] == oppositeColor) board.gen_push(c, c + offset - 1, 17);
-        if ((c & 7) != 7 && board.color[c + offset + 1] == oppositeColor) board.gen_push(c, c + offset + 1, 17);
+        if ((c & 7) != 0 && board.color[c + offset - 1] == oppositeColor) board.addMove(c, c + offset - 1, 17);
+        if ((c & 7) != 7 && board.color[c + offset + 1] == oppositeColor) board.addMove(c, c + offset + 1, 17);
 
         if (board.color[c + offset] == Constants.EMPTY) {
-            board.gen_push(c, c + offset, 16);
+            board.addMove(c, c + offset, 16);
             if ((board.side == Constants.LIGHT && c >= 48) || (board.side == Constants.DARK && c <= 15))
-                if (board.color[c + (offset << 1)] == Constants.EMPTY) board.gen_push(c, c + (offset << 1), 24);
+                if (board.color[c + (offset << 1)] == Constants.EMPTY) board.addMove(c, c + (offset << 1), 24);
         }
     }
 
@@ -25,14 +25,14 @@ class Pion {
         if (board.ep != -1) {
             if (board.side == Constants.LIGHT) {
                 if ((board.ep & 7) != 0 && board.color[board.ep + 7] == Constants.LIGHT && board.piece[board.ep + 7] == Constants.PAWN)
-                    board.gen_push(board.ep + 7, board.ep, 21);
+                    board.addMove(board.ep + 7, board.ep, 21);
                 if ((board.ep & 7) != 7 && (board.color[board.ep + 9] == Constants.LIGHT && board.piece[board.ep + 9] == Constants.PAWN))
-                    board.gen_push(board.ep + 9, board.ep, 21);
+                    board.addMove(board.ep + 9, board.ep, 21);
             } else {
                 if ((board.ep & 7) != 0 && (board.color[board.ep - 9] == Constants.DARK && board.piece[board.ep - 9] == Constants.PAWN))
-                    board.gen_push(board.ep - 9, board.ep, 21);
+                    board.addMove(board.ep - 9, board.ep, 21);
                 if ((board.ep & 7) != 7 && (board.color[board.ep - 7] == Constants.DARK && board.piece[board.ep - 7] == Constants.PAWN))
-                    board.gen_push(board.ep - 7, board.ep, 21);
+                    board.addMove(board.ep - 7, board.ep, 21);
             }
         }
     }
