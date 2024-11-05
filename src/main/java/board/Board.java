@@ -79,8 +79,8 @@ public class Board implements Constants {
      * Génère les mouvements dans une direction donnée pour une pièce.
      *
      * @param startSquare La case de départ de la pièce.
-     * @param pieceType Le type de la pièce (tour, fou, etc.).
-     * @param direction La direction de déplacement de la pièce.
+     * @param pieceType   Le type de la pièce (tour, fou, etc.).
+     * @param direction   La direction de déplacement de la pièce.
      */
     private void generateMovesInDirection(int startSquare, int pieceType, int direction) {
         int currentSquare = startSquare;
@@ -101,33 +101,16 @@ public class Board implements Constants {
      * Gère le cas où la case est occupée.
      *
      * @param fromSquare La case de départ.
-     * @param toSquare La case d'arrivée.
+     * @param toSquare   La case d'arrivée.
      */
     private void handleOccupiedSquare(int fromSquare, int toSquare) {
-        if (isOpponentPiece(color, xside, toSquare)) {
-            addMove(fromSquare, toSquare, 1);  // Capture
-        }
-    }
-
-    /**
-     * Ajoute un mouvement à la liste des mouvements possibles.
-     *
-     * @param from La case de départ.
-     * @param to La case d'arrivée.
-     * @param bits Les informations supplémentaires sur le mouvement.
-     */
-    public void addMove(int from, int to, int bits) {
-        if (isPromotionMove(bits, to)) {
-            pion.gen_promote(from, to, bits);
-        } else {
-            addStandardMove(from, to, bits);
-        }
+        if (isOpponentPiece(color, xside, toSquare)) addMove(fromSquare, toSquare, 1);  // Capture
     }
 
     /**
      * Vérifie si le mouvement est une promotion de pion.
      *
-     * @param moveFlags Les drapeaux du mouvement.
+     * @param moveFlags         Les drapeaux du mouvement.
      * @param destinationSquare La case de destination.
      * @return true si c'est un mouvement de promotion, sinon false.
      */
@@ -135,15 +118,6 @@ public class Board implements Constants {
         return isPromotionFlagSet(moveFlags) && isOnPromotionRank(destinationSquare);
     }
 
-    /**
-     * Vérifie si le drapeau de promotion est défini dans les flags du mouvement.
-     *
-     * @param moveFlags Les drapeaux du mouvement.
-     * @return true si le drapeau de promotion est défini, sinon false.
-     */
-    private boolean isPromotionFlagSet(int moveFlags) {
-        return (moveFlags & PROMOTION_FLAG) != 0;
-    }
 
     /**
      * Vérifie si la case de destination est sur la rangée de promotion.
@@ -159,10 +133,15 @@ public class Board implements Constants {
      * Ajoute un mouvement standard (non promotion) à la liste des mouvements.
      *
      * @param fromSquare La case de départ.
-     * @param toSquare La case d'arrivée.
-     * @param moveFlags Les informations supplémentaires sur le mouvement.
+     * @param toSquare   La case d'arrivée.
+     * @param moveFlags  Les informations supplémentaires sur le mouvement.
      */
     private void addStandardMove(int fromSquare, int toSquare, int moveFlags) {
         pseudomoves.add(new Move((byte) fromSquare, (byte) toSquare, (byte) 0, (byte) moveFlags));
+    }
+
+    void addMove(int from, int to, int bits) {
+        if (isPromotionMove(bits, to)) pion.gen_promote(from, to, bits);
+        else addStandardMove(from, to, bits);
     }
 }
