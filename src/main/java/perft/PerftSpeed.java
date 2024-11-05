@@ -47,7 +47,7 @@ public class PerftSpeed {
             result.moveCount++;
             return result;
         }
-        board.gen();
+        board.generateMoves();
         List<Move> moves = board.pseudomoves;
         for (Move move : moves) {
             if (move.makemove(board)) {

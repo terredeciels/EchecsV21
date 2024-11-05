@@ -66,7 +66,7 @@ public class PerftCompare implements Constants {
                 return result;
             }
 
-            board.gen();
+            board.generateMoves();
             List<Move> moves = board.pseudomoves;
             for (Move move : moves) {
                 if (move.makemove(board)) {

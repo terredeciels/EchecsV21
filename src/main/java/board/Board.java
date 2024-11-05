@@ -44,10 +44,10 @@ public class Board implements Constants {
         roi = new Roi(this);
     }
 
-    public void gen() {
+    public void generateMoves() {
         range(0, BOARD_SIZE).filter(square -> color[square] == side).forEach(square -> {
             if (piece[square] == PAWN) {
-                pion.gen_pawn(square);
+                pion.generatePawnMoves(square);
             } else {
                 generatePieceMoves(square);
             }
@@ -58,33 +58,50 @@ public class Board implements Constants {
 
     private void generatePieceMoves(int square) {
         int pieceType = piece[square];
-        for (int direction = 0; direction < offsets[pieceType]; ++direction) {
+        for (int direction = 0; direction < offsets[pieceType]; ++direction)
             generateMovesInDirection(square, pieceType, direction);
-        }
     }
 
-    private void generateMovesInDirection(int square, int pieceType, int direction) {
-        int currentSquare = square;
+    private void generateMovesInDirection(int startSquare, int pieceType, int direction) {
+        int currentSquare = startSquare;
+
         while (true) {
-            currentSquare = mailbox[mailbox64[currentSquare] + offset[pieceType][direction]];
+            currentSquare = getNextSquare(currentSquare, pieceType, direction);
             if (isOutOfBounds(currentSquare)) break;
             if (isOccupied(color, currentSquare)) {
-                if (isOpponentPiece(color, xside, currentSquare)) {
-                    addMove(square, currentSquare, 1);
-                }
+                occupiedSquare(startSquare, currentSquare);
                 break;
             }
-            addMove(square, currentSquare, 0);
-            if (!slide[pieceType]) break;
+            // Ajouter le mouvement si la case est libre
+            addMove(startSquare, currentSquare, 0);
+            // Si la pièce ne peut pas glisser, arrêter la boucle
+            if (!canSlide(pieceType)) break;
         }
     }
 
-    public void addMove(int from, int to, int bits) {
-        if ((bits & 16) != 0 && (side == LIGHT ? to <= H8 : to >= A1)) {
-            pion.gen_promote(from, to, bits);
-        } else {
-            pseudomoves.add(new Move((byte) from, (byte) to, (byte) 0, (byte) bits));
-        }
+
+    void occupiedSquare(int fromSquare, int toSquare) {
+        if (isOpponentPiece(color, xside, toSquare)) addMove(fromSquare, toSquare, 1);  // Capture
     }
+
+
+    public void addMove(int from, int to, int bits) {
+        if (isPromotionMove(bits, to)) pion.gen_promote(from, to, bits);
+        else addStandardMove(from, to, bits);
+    }
+
+    private boolean isPromotionMove(int moveFlags, int destinationSquare) {
+        return isPromotionFlagSet(moveFlags) && isOnPromotionRank(destinationSquare);
+    }
+
+    private boolean isOnPromotionRank(int destinationSquare) {
+        return side == LIGHT ? destinationSquare >= A8 && destinationSquare <= H8 : destinationSquare >= A1 && destinationSquare <= H1;
+    }
+
+    private void addStandardMove(int fromSquare, int toSquare, int moveFlags) {
+        pseudomoves.add(new Move((byte) fromSquare, (byte) toSquare, (byte) 0, (byte) moveFlags));
+    }
+
+
 }
 

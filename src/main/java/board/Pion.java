@@ -7,7 +7,7 @@ class Pion {
         this.board = board;
     }
 
-    public void gen_pawn(int c) {
+    public void generatePawnMoves(int c) {
         final int offset = (board.side == Constants.LIGHT) ? -8 : 8;
         final int oppositeColor = board.side ^ 1;
 
