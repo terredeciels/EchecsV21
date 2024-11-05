@@ -12,7 +12,7 @@ public interface Constants {
     int NO_COL = -1, NO_ROW = -1, NO_SQUARE = -1;
     int LIGHT = 0;
     int DARK = 1;
-
+    int PROMOTION_FLAG = 16;
 
     int A1 = 56;
     int B1 = 57;
