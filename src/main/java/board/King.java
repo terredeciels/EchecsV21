@@ -2,10 +2,10 @@ package board;
 
 import static java.util.stream.IntStream.range;
 
-class Roi {
+class King {
     private final Board board;
 
-    public Roi(Board board) {
+    public King(Board board) {
         this.board = board;
     }
 

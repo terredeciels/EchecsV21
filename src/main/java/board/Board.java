@@ -3,7 +3,7 @@ package board;
 import java.util.ArrayList;
 import java.util.List;
 
-import static board.ChessUtils.*;
+
 import static board.Move.isPromotionFlagSet;
 import static board.Piece.*;
 import static java.lang.System.arraycopy;
@@ -28,12 +28,12 @@ public class Board implements Constants {
 
     public List<Move> pseudomoves = new ArrayList<>();  // Liste des pseudo-mouvements
     public UndoMove um = new UndoMove();  // Historique des mouvements
-    public Pion pion;  // Classe pour les mouvements des pions
-    public Roi roi;  // Classe pour les mouvements du roi
+    public Pawn pawn;  // Classe pour les mouvements des pions
+    public King king;  // Classe pour les mouvements du king
 
     public Board() {
-        pion = new Pion(this);
-        roi = new Roi(this);
+        pawn = new Pawn(this);
+        king = new King(this);
     }
 
     public Board(Board board) {
@@ -46,8 +46,8 @@ public class Board implements Constants {
         fifty = board.fifty;
         pseudomoves = new ArrayList<>();
         um = new UndoMove();
-        pion = new Pion(this);
-        roi = new Roi(this);
+        pawn = new Pawn(this);
+        king = new King(this);
     }
 
     /**
@@ -56,13 +56,13 @@ public class Board implements Constants {
     public void generateMoves() {
         range(0, BOARD_SIZE).filter(square -> color[square] == side).forEach(square -> {
             if (piece[square] == PAWN) {
-                pion.generatePawnMoves(square);
+                pawn.generatePawnMoves(square);
             } else {
                 generatePieceMoves(square);
             }
         });
-        roi.gen_castles();  // Génère les mouvements de roque possibles
-        pion.gen_enpassant();  // Génère les prises en passant possibles
+        king.gen_castles();  // Génère les mouvements de roque possibles
+        pawn.gen_enpassant();  // Génère les prises en passant possibles
     }
 
     /**
@@ -110,7 +110,7 @@ public class Board implements Constants {
     }
 
     /**
-     * Vérifie si le mouvement est une promotion de pion.
+     * Vérifie si le mouvement est une promotion de pawn.
      *
      * @param moveFlags         Les drapeaux du mouvement.
      * @param destinationSquare La case de destination.
@@ -143,7 +143,7 @@ public class Board implements Constants {
     }
 
     void addMove(int from, int to, int bits) {
-        if (isPromotionMove(bits, to)) pion.gen_promote(from, to, bits);
+        if (isPromotionMove(bits, to)) pawn.gen_promote(from, to, bits);
         else addStandardMove(from, to, bits);
     } public static boolean isOccupied(int[] boardColors, int square) {
         return boardColors[square] != EMPTY;

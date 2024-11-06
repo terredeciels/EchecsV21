@@ -1,9 +1,9 @@
 package board;
 
-class Pion {
+class Pawn {
     private final Board board;
 
-    public Pion(Board board) {
+    public Pawn(Board board) {
         this.board = board;
     }
 

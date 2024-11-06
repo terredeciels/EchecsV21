@@ -30,31 +30,31 @@ public class Move {
             int from;
             int to;
 
-            if (board.roi.in_check(board.side)) return false;
+            if (board.king.in_check(board.side)) return false;
             switch (this.to) {
                 case 62:
-                    if (board.color[Constants.F1] != Constants.EMPTY || board.color[Constants.G1] != Constants.EMPTY || board.roi.isAttacked(Constants.F1, board.xside) || board.roi.isAttacked(Constants.G1, board.xside)) {
+                    if (board.color[Constants.F1] != Constants.EMPTY || board.color[Constants.G1] != Constants.EMPTY || board.king.isAttacked(Constants.F1, board.xside) || board.king.isAttacked(Constants.G1, board.xside)) {
                         return false;
                     }
                     from = Constants.H1;
                     to = Constants.F1;
                     break;
                 case 58:
-                    if (board.color[Constants.B1] != Constants.EMPTY || board.color[Constants.C1] != Constants.EMPTY || board.color[Constants.D1] != Constants.EMPTY || board.roi.isAttacked(Constants.C1, board.xside) || board.roi.isAttacked(Constants.D1, board.xside)) {
+                    if (board.color[Constants.B1] != Constants.EMPTY || board.color[Constants.C1] != Constants.EMPTY || board.color[Constants.D1] != Constants.EMPTY || board.king.isAttacked(Constants.C1, board.xside) || board.king.isAttacked(Constants.D1, board.xside)) {
                         return false;
                     }
                     from = Constants.A1;
                     to = Constants.D1;
                     break;
                 case 6:
-                    if (board.color[Constants.F8] != Constants.EMPTY || board.color[Constants.G8] != Constants.EMPTY || board.roi.isAttacked(Constants.F8, board.xside) || board.roi.isAttacked(Constants.G8, board.xside)) {
+                    if (board.color[Constants.F8] != Constants.EMPTY || board.color[Constants.G8] != Constants.EMPTY || board.king.isAttacked(Constants.F8, board.xside) || board.king.isAttacked(Constants.G8, board.xside)) {
                         return false;
                     }
                     from = Constants.H8;
                     to = Constants.F8;
                     break;
                 case 2:
-                    if (board.color[Constants.B8] != Constants.EMPTY || board.color[Constants.C8] != Constants.EMPTY || board.color[Constants.D8] != Constants.EMPTY || board.roi.isAttacked(Constants.C8, board.xside) || board.roi.isAttacked(Constants.D8, board.xside)) {
+                    if (board.color[Constants.B8] != Constants.EMPTY || board.color[Constants.C8] != Constants.EMPTY || board.color[Constants.D8] != Constants.EMPTY || board.king.isAttacked(Constants.C8, board.xside) || board.king.isAttacked(Constants.D8, board.xside)) {
                         return false;
                     }
                     from = Constants.A8;
@@ -99,7 +99,7 @@ public class Move {
 
         board.side ^= 1;
         board.xside ^= 1;
-        if (board.roi.in_check(board.xside)) {
+        if (board.king.in_check(board.xside)) {
             board.um.takeback(board);
             return false;
         }
