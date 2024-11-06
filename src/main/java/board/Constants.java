@@ -37,6 +37,7 @@ public interface Constants {
 
     int PAWN = 0;
     int KNIGHT = 1;
+    int BISHOP = 2;
     int ROOK = 3;
     int QUEEN = 4;
     int KING = 5;

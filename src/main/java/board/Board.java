@@ -77,10 +77,48 @@ public class Board implements Constants {
      *
      * @param square La case sur laquelle se trouve la pièce.
      */
+//    private void generatePieceMoves2(int square) {
+//        int pieceType = piece[square];
+//        for (int direction = 0; direction < offsets[pieceType]; ++direction) {
+//            generateMovesInDirection(square, pieceType, direction);
+//        }
+//    }
+
     private void generatePieceMoves(int square) {
         int pieceType = piece[square];
-        for (int direction = 0; direction < offsets[pieceType]; ++direction) {
-            generateMovesInDirection(square, pieceType, direction);
+        switch (pieceType) {
+            case KING:
+                for (int direction = 0; direction < offsets[KING]; ++direction) {
+                    king.generateMovesInDirection(square, direction);
+                }
+                break;
+
+            case QUEEN:
+                for (int direction = 0; direction < offsets[QUEEN]; ++direction) {
+                    generateMovesInDirection(square, QUEEN, direction);
+                }
+                break;
+
+            case ROOK:
+                for (int direction = 0; direction < offsets[ROOK]; ++direction) {
+                    generateMovesInDirection(square, ROOK, direction);
+                }
+                break;
+
+            case BISHOP:
+                for (int direction = 0; direction < offsets[BISHOP]; ++direction) {
+                    generateMovesInDirection(square, BISHOP, direction);
+                }
+                break;
+
+            case KNIGHT:
+                for (int direction = 0; direction < offsets[KNIGHT]; ++direction) {
+                    generateMovesInDirection(square, KNIGHT, direction);
+                }
+                break;
+
+            default:
+                throw new IllegalArgumentException("Type de pièce invalide: " + pieceType);
         }
     }
 
@@ -91,7 +129,7 @@ public class Board implements Constants {
      * @param pieceType   Le type de la pièce (tour, fou, etc.).
      * @param direction   La direction de déplacement de la pièce.
      */
-    private void generateMovesInDirection(int startSquare, int pieceType, int direction) {
+    public void generateMovesInDirection(int startSquare, int pieceType, int direction) {
         int currentSquare = startSquare;
 
         while (true) {
@@ -112,7 +150,7 @@ public class Board implements Constants {
      * @param fromSquare La case de départ.
      * @param toSquare   La case d'arrivée.
      */
-    private void handleOccupiedSquare(int fromSquare, int toSquare) {
+    void handleOccupiedSquare(int fromSquare, int toSquare) {
         if (isOpponentPiece(color, xside, toSquare)) addMove(fromSquare, toSquare, 1);  // Capture
     }
 

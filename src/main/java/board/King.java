@@ -1,5 +1,9 @@
 package board;
 
+import static board.Board.isOccupied;
+import static board.Board.isOutOfBounds;
+import static board.Constants.KING;
+import static board.Piece.getNextSquare;
 import static java.util.stream.IntStream.range;
 
 class King {
@@ -21,7 +25,7 @@ class King {
 
     public boolean in_check(int s) {
         return range(0, Board.BOARD_SIZE)
-                .filter(i -> board.piece[i] == Constants.KING && board.color[i] == s)
+                .filter(i -> board.piece[i] == KING && board.color[i] == s)
                 .anyMatch(i -> isAttacked(i, s ^ 1));
     }
 
@@ -47,5 +51,21 @@ class King {
             if (board.color[sqIndex] != Constants.EMPTY || !Constants.slide[pieceType]) break;
         }
         return false;
+    }
+
+
+    public void generateMovesInDirection(int square, int direction) {
+        int currentSquare = square;
+
+// Logique pour le roi uniquement
+        currentSquare = getNextSquare(currentSquare, KING, direction);
+        if (!isOutOfBounds(currentSquare)) {
+            if (isOccupied(board.color, currentSquare)) {
+                board.handleOccupiedSquare(square, currentSquare);
+            } else {
+                board.addMove(square, currentSquare, 0);  // Ajouter le mouvement si la case est libre
+            }
+        }
+
     }
 }
