@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static board.Move.isPromotionFlagSet;
-import static board.Piece.*;
+import static board.Piece.isOpponentPiece;
 import static java.lang.System.arraycopy;
 import static java.util.stream.IntStream.range;
 
@@ -30,11 +30,17 @@ public class Board implements Constants {
     public Pawn pawn;  // Classe pour les mouvements des pions
     public King king;  // Classe pour les mouvements du king
     public Rook rook;
+    public Bishop bishop;
+    public Queen queen;
+    public Knight knight;
 
     public Board() {
         pawn = new Pawn(this);
         king = new King(this);
-        rook=new Rook(this);
+        rook = new Rook(this);
+        bishop = new Bishop(this);
+        queen = new Queen(this);
+        knight = new Knight(this);
     }
 
     public Board(Board board) {
@@ -49,7 +55,10 @@ public class Board implements Constants {
         um = new UndoMove();
         pawn = new Pawn(this);
         king = new King(this);
-        rook=new Rook(this);
+        rook = new Rook(this);
+        bishop = new Bishop(this);
+        queen = new Queen(this);
+        knight = new Knight(this);
     }
 
     public static boolean isOccupied(int[] boardColors, int square) {
@@ -75,18 +84,6 @@ public class Board implements Constants {
         pawn.genEnpassant();  // Génère les prises en passant possibles
     }
 
-    /**
-     * Génère les mouvements possibles pour une pièce donnée.
-     *
-     * @param square La case sur laquelle se trouve la pièce.
-     */
-//    private void generatePieceMoves2(int square) {
-//        int pieceType = piece[square];
-//        for (int direction = 0; direction < offsets[pieceType]; ++direction) {
-//            generateMovesInDirection(square, pieceType, direction);
-//        }
-//    }
-
     private void generatePieceMoves(int square) {
         int pieceType = piece[square];
         switch (pieceType) {
@@ -98,7 +95,7 @@ public class Board implements Constants {
 
             case QUEEN:
                 for (int direction = 0; direction < offsets[QUEEN]; ++direction) {
-                    generateMovesInDirection(square, QUEEN, direction);
+                    queen.generateMovesInDirection(square, direction);
                 }
                 break;
 
@@ -110,40 +107,16 @@ public class Board implements Constants {
 
             case BISHOP:
                 for (int direction = 0; direction < offsets[BISHOP]; ++direction) {
-                    generateMovesInDirection(square, BISHOP, direction);
+                    bishop.generateMovesInDirection(square, direction);
                 }
                 break;
 
             case KNIGHT:
-                for (int direction = 0; direction < offsets[KNIGHT]; ++direction) {
-                    generateMovesInDirection(square, KNIGHT, direction);
-                }
+                knight.generateMovesInDirection(square);
                 break;
 
             default:
                 throw new IllegalArgumentException("Type de pièce invalide: " + pieceType);
-        }
-    }
-
-    /**
-     * Génère les mouvements dans une direction donnée pour une pièce.
-     *
-     * @param startSquare La case de départ de la pièce.
-     * @param pieceType   Le type de la pièce (tour, fou, etc.).
-     * @param direction   La direction de déplacement de la pièce.
-     */
-    public void generateMovesInDirection(int startSquare, int pieceType, int direction) {
-        int currentSquare = startSquare;
-
-        while (true) {
-            currentSquare = getNextSquare(currentSquare, pieceType, direction);
-            if (isOutOfBounds(currentSquare)) break;
-            if (isOccupied(color, currentSquare)) {
-                handleOccupiedSquare(startSquare, currentSquare);
-                break;
-            }
-            addMove(startSquare, currentSquare, 0);  // Ajouter le mouvement si la case est libre
-            if (!canSlide(pieceType)) break;  // Si la pièce ne peut pas glisser, arrêter la boucle
         }
     }
 
