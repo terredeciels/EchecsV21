@@ -29,10 +29,12 @@ public class Board implements Constants {
     public UndoMove um = new UndoMove();  // Historique des mouvements
     public Pawn pawn;  // Classe pour les mouvements des pions
     public King king;  // Classe pour les mouvements du king
+    public Rook rook;
 
     public Board() {
         pawn = new Pawn(this);
         king = new King(this);
+        rook=new Rook(this);
     }
 
     public Board(Board board) {
@@ -47,6 +49,7 @@ public class Board implements Constants {
         um = new UndoMove();
         pawn = new Pawn(this);
         king = new King(this);
+        rook=new Rook(this);
     }
 
     public static boolean isOccupied(int[] boardColors, int square) {
@@ -101,7 +104,7 @@ public class Board implements Constants {
 
             case ROOK:
                 for (int direction = 0; direction < offsets[ROOK]; ++direction) {
-                    generateMovesInDirection(square, ROOK, direction);
+                    rook.generateMovesInDirection(square, direction);
                 }
                 break;
 
