@@ -9,7 +9,7 @@ class King {
         this.board = board;
     }
 
-    public void gen_castles() {
+    public void genCastles() {
         if (board.side == Constants.LIGHT) {
             if ((board.castle & 1) != 0) board.addMove(Constants.E1, Constants.G1, 2);
             if ((board.castle & 2) != 0) board.addMove(Constants.E1, Constants.C1, 2);

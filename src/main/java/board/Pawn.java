@@ -21,7 +21,7 @@ class Pawn {
         }
     }
 
-    public void gen_enpassant() {
+    public void genEnpassant() {
         if (board.ep != -1) {
             if (board.side == Constants.LIGHT) {
                 if ((board.ep & 7) != 0 && board.color[board.ep + 7] == Constants.LIGHT && board.piece[board.ep + 7] == Constants.PAWN)

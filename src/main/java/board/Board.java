@@ -68,8 +68,8 @@ public class Board implements Constants {
                 generatePieceMoves(square);
             }
         });
-        king.gen_castles();  // Génère les mouvements de roque possibles
-        pawn.gen_enpassant();  // Génère les prises en passant possibles
+        king.genCastles();  // Génère les mouvements de roque possibles
+        pawn.genEnpassant();  // Génère les prises en passant possibles
     }
 
     /**
