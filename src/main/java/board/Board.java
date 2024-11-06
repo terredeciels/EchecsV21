@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static board.ChessUtils.*;
+import static board.Move.isPromotionFlagSet;
+import static board.Piece.*;
 import static java.lang.System.arraycopy;
 import static java.util.stream.IntStream.range;
 
@@ -143,5 +145,9 @@ public class Board implements Constants {
     void addMove(int from, int to, int bits) {
         if (isPromotionMove(bits, to)) pion.gen_promote(from, to, bits);
         else addStandardMove(from, to, bits);
+    } public static boolean isOccupied(int[] boardColors, int square) {
+        return boardColors[square] != EMPTY;
+    }   public static boolean isOutOfBounds(int square) {
+        return square < 0;
     }
 }

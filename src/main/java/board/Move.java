@@ -1,5 +1,7 @@
 package board;
 
+import static board.Constants.PROMOTION_FLAG;
+
 /**
  * 1	capture 2	castle 4	en passant capture 8	pushing a pawn 2 squares 16	pawn
  * move 32	promote
@@ -20,7 +22,9 @@ public class Move {
         this.promote = promote;
         this.bits = bits;
     }
-
+    public static boolean isPromotionFlagSet(int moveFlags) {
+        return (moveFlags & PROMOTION_FLAG) != 0;
+    }
     public boolean makemove(Board board) {
         if ((bits & 2) != 0) {
             int from;
@@ -102,4 +106,7 @@ public class Move {
 
         return true;
     }
+
+
+
 }
