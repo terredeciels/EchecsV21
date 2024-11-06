@@ -22,9 +22,11 @@ public class Move {
         this.promote = promote;
         this.bits = bits;
     }
+
     public static boolean isPromotionFlagSet(int moveFlags) {
         return (moveFlags & PROMOTION_FLAG) != 0;
     }
+
     public boolean makemove(Board board) {
         if ((bits & 2) != 0) {
             int from;
@@ -106,7 +108,6 @@ public class Move {
 
         return true;
     }
-
 
 
 }
