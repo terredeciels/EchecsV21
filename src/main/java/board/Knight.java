@@ -4,6 +4,7 @@ import static board.Board.isOccupied;
 import static board.Board.isOutOfBounds;
 import static board.Constants.KNIGHT;
 import static board.Constants.OFFSETS;
+import static java.util.stream.IntStream.range;
 
 public class Knight extends Piece {
 
@@ -13,16 +14,12 @@ public class Knight extends Piece {
         this.board = board;
     }
 
-
     public void generateMovesInDirection(int square) {
-        for (int direction = 0; direction < OFFSETS[KNIGHT]; ++direction) {
-            int currentSquare = getNextSquare(square, KNIGHT, direction);
-            if (isOutOfBounds(currentSquare)) continue;
-            if (isOccupied(board.color, currentSquare)) {
-                board.handleOccupiedSquare(square, currentSquare);
-                continue;
-            }
-            board.addMove(square, currentSquare, 0);  // Ajouter le mouvement si la case est libre
-        }
+        range(0, OFFSETS[KNIGHT]).map(direction ->
+                getNextSquare(square, KNIGHT, direction)).filter(currentSquare ->
+                !isOutOfBounds(currentSquare)).forEach(currentSquare -> {
+            if (isOccupied(board.color, currentSquare)) board.handleOccupiedSquare(square, currentSquare);
+            else board.addMove(square, currentSquare, 0);  // Ajouter le mouvement si la case est libre
+        });
     }
 }
