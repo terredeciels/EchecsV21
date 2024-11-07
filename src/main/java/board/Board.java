@@ -83,32 +83,14 @@ public class Board implements Constants {
         king.genCastles();  // Génère les mouvements de roque possibles
         pawn.genEnpassant();  // Génère les prises en passant possibles
     }
-
     private void generatePieceMoves(int square) {
         int pieceType = piece[square];
         switch (pieceType) {
             case KING:
-                for (int direction = 0; direction < offsets[KING]; ++direction) {
-                    king.generateMovesInDirection(square, direction);
-                }
-                break;
-
             case QUEEN:
-                for (int direction = 0; direction < offsets[QUEEN]; ++direction) {
-                    queen.generateMovesInDirection(square, direction);
-                }
-                break;
-
             case ROOK:
-                for (int direction = 0; direction < offsets[ROOK]; ++direction) {
-                    rook.generateMovesInDirection(square, direction);
-                }
-                break;
-
             case BISHOP:
-                for (int direction = 0; direction < offsets[BISHOP]; ++direction) {
-                    bishop.generateMovesInDirection(square, direction);
-                }
+                generateSlidingPieceMoves(pieceType, square);
                 break;
 
             case KNIGHT:
@@ -119,6 +101,53 @@ public class Board implements Constants {
                 throw new IllegalArgumentException("Type de pièce invalide: " + pieceType);
         }
     }
+
+    private void generateSlidingPieceMoves(int pieceType, int square) {
+        for (int direction = 0; direction < offsets[pieceType]; ++direction) {
+            switch (pieceType) {
+                case KING -> king.generateMovesInDirection(square, direction);
+                case QUEEN -> queen.generateMovesInDirection(square, direction);
+                case ROOK -> rook.generateMovesInDirection(square, direction);
+                case BISHOP -> bishop.generateMovesInDirection(square, direction);
+            }
+        }
+    }
+
+//    private void generatePieceMoves(int square) {
+//        int pieceType = piece[square];
+//        switch (pieceType) {
+//            case KING:
+//                for (int direction = 0; direction < offsets[KING]; ++direction) {
+//                    king.generateMovesInDirection(square, direction);
+//                }
+//                break;
+//
+//            case QUEEN:
+//                for (int direction = 0; direction < offsets[QUEEN]; ++direction) {
+//                    queen.generateMovesInDirection(square, direction);
+//                }
+//                break;
+//
+//            case ROOK:
+//                for (int direction = 0; direction < offsets[ROOK]; ++direction) {
+//                    rook.generateMovesInDirection(square, direction);
+//                }
+//                break;
+//
+//            case BISHOP:
+//                for (int direction = 0; direction < offsets[BISHOP]; ++direction) {
+//                    bishop.generateMovesInDirection(square, direction);
+//                }
+//                break;
+//
+//            case KNIGHT:
+//                knight.generateMovesInDirection(square);
+//                break;
+//
+//            default:
+//                throw new IllegalArgumentException("Type de pièce invalide: " + pieceType);
+//        }
+//    }
 
     /**
      * Gère le cas où la case est occupée.
