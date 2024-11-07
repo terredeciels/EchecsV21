@@ -4,9 +4,8 @@ import static board.Board.isOccupied;
 import static board.Board.isOutOfBounds;
 import static board.Constants.KNIGHT;
 import static board.Constants.offsets;
-import static board.Piece.getNextSquare;
 
-public class Knight {
+public class Knight extends Piece {
 
     private final Board board;
 

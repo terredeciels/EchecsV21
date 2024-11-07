@@ -6,6 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="refactorisé et pass">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Bishop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Bishop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/King.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/King.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Knight.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Knight.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Queen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Queen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Rook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Rook.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -365,7 +373,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730930172886</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="refactorisé et pass">
+      <option name="closed" value="true" />
+      <created>1730993650875</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1730993650875</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -403,6 +419,7 @@
     <MESSAGE value="refactorisé" />
     <MESSAGE value="refactorisé Rook" />
     <MESSAGE value="refactorisé Queen Knight" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactorisé Queen Knight" />
+    <MESSAGE value="refactorisé et pass" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactorisé et pass" />
   </component>
 </project>

@@ -1,7 +1,9 @@
 package board;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static board.Move.isPromotionFlagSet;
 import static board.Piece.isOpponentPiece;
@@ -11,11 +13,10 @@ import static java.util.stream.IntStream.range;
 public class Board implements Constants {
 
     public static final int BOARD_SIZE = 64;
-
+    private final Map<Integer, Piece> pieceMap = new HashMap<>();
     // Tableaux représentant les couleurs et les pièces sur l'échiquier
     public int[] color = new int[BOARD_SIZE];
     public int[] piece = new int[BOARD_SIZE];
-
     // Informations sur l'état de la partie
     public int side;  // Joueur courant
     public int xside;  // Joueur adverse
@@ -24,7 +25,6 @@ public class Board implements Constants {
     public int halfMoveClock;
     public int plyNumber;
     public int fifty;
-
     public List<Move> pseudomoves = new ArrayList<>();  // Liste des pseudo-mouvements
     public UndoMove um = new UndoMove();  // Historique des mouvements
     public Pawn pawn;  // Classe pour les mouvements des pions
@@ -34,13 +34,21 @@ public class Board implements Constants {
     public Queen queen;
     public Knight knight;
 
+
     public Board() {
+
         pawn = new Pawn(this);
         king = new King(this);
         rook = new Rook(this);
         bishop = new Bishop(this);
         queen = new Queen(this);
         knight = new Knight(this);
+
+        pieceMap.put(KING, king);
+        pieceMap.put(QUEEN, queen);
+        pieceMap.put(ROOK, rook);
+        pieceMap.put(BISHOP, bishop);
+
     }
 
     public Board(Board board) {
@@ -53,12 +61,17 @@ public class Board implements Constants {
         fifty = board.fifty;
         pseudomoves = new ArrayList<>();
         um = new UndoMove();
+
         pawn = new Pawn(this);
         king = new King(this);
         rook = new Rook(this);
         bishop = new Bishop(this);
         queen = new Queen(this);
         knight = new Knight(this);
+        pieceMap.put(KING, king);
+        pieceMap.put(QUEEN, queen);
+        pieceMap.put(ROOK, rook);
+        pieceMap.put(BISHOP, bishop);
     }
 
     public static boolean isOccupied(int[] boardColors, int square) {
@@ -83,6 +96,7 @@ public class Board implements Constants {
         king.genCastles();  // Génère les mouvements de roque possibles
         pawn.genEnpassant();  // Génère les prises en passant possibles
     }
+
     private void generatePieceMoves(int square) {
         int pieceType = piece[square];
         switch (pieceType) {
@@ -103,51 +117,15 @@ public class Board implements Constants {
     }
 
     private void generateSlidingPieceMoves(int pieceType, int square) {
-        for (int direction = 0; direction < offsets[pieceType]; ++direction) {
-            switch (pieceType) {
-                case KING -> king.generateMovesInDirection(square, direction);
-                case QUEEN -> queen.generateMovesInDirection(square, direction);
-                case ROOK -> rook.generateMovesInDirection(square, direction);
-                case BISHOP -> bishop.generateMovesInDirection(square, direction);
+        Piece piece = pieceMap.get(pieceType);
+        if (piece != null) {
+            for (int direction = 0; direction < offsets[pieceType]; ++direction) {
+                piece.generateMovesInDirection(square, direction);
             }
+        } else {
+            throw new IllegalArgumentException("Type de pièce non valide : " + pieceType);
         }
     }
-
-//    private void generatePieceMoves(int square) {
-//        int pieceType = piece[square];
-//        switch (pieceType) {
-//            case KING:
-//                for (int direction = 0; direction < offsets[KING]; ++direction) {
-//                    king.generateMovesInDirection(square, direction);
-//                }
-//                break;
-//
-//            case QUEEN:
-//                for (int direction = 0; direction < offsets[QUEEN]; ++direction) {
-//                    queen.generateMovesInDirection(square, direction);
-//                }
-//                break;
-//
-//            case ROOK:
-//                for (int direction = 0; direction < offsets[ROOK]; ++direction) {
-//                    rook.generateMovesInDirection(square, direction);
-//                }
-//                break;
-//
-//            case BISHOP:
-//                for (int direction = 0; direction < offsets[BISHOP]; ++direction) {
-//                    bishop.generateMovesInDirection(square, direction);
-//                }
-//                break;
-//
-//            case KNIGHT:
-//                knight.generateMovesInDirection(square);
-//                break;
-//
-//            default:
-//                throw new IllegalArgumentException("Type de pièce invalide: " + pieceType);
-//        }
-//    }
 
     /**
      * Gère le cas où la case est occupée.

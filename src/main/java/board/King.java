@@ -3,10 +3,9 @@ package board;
 import static board.Board.isOccupied;
 import static board.Board.isOutOfBounds;
 import static board.Constants.KING;
-import static board.Piece.getNextSquare;
 import static java.util.stream.IntStream.range;
 
-class King {
+class King extends Piece {
     private final Board board;
 
     public King(Board board) {

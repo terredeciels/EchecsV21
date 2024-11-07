@@ -2,7 +2,7 @@ package board;
 
 import static board.Constants.*;
 
-public class Piece {
+public abstract class Piece {
 
 
     public Piece() {
@@ -18,5 +18,9 @@ public class Piece {
 
     public static int getNextSquare(int currentSquare, int pieceType, int direction) {
         return mailbox[mailbox64[currentSquare] + offset[pieceType][direction]];
+    }
+
+    void generateMovesInDirection(int square, int direction) {
+
     }
 }

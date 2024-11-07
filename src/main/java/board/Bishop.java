@@ -3,9 +3,8 @@ package board;
 import static board.Board.isOccupied;
 import static board.Board.isOutOfBounds;
 import static board.Constants.BISHOP;
-import static board.Piece.getNextSquare;
 
-public class Bishop {
+public class Bishop extends Piece {
 
     private final Board board;
 
