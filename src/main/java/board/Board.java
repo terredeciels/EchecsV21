@@ -82,17 +82,8 @@ public class Board implements Constants {
         return square < 0;
     }
 
-    /**
-     * Génère tous les mouvements possibles pour l'état actuel de l'échiquier.
-     */
     public void generateMoves() {
-        range(0, BOARD_SIZE).filter(square -> color[square] == side).forEach(square -> {
-            if (piece[square] == PAWN) {
-                pawn.generatePawnMoves(square);
-            } else {
-                generatePieceMoves(square);
-            }
-        });
+        range(0, BOARD_SIZE).filter(square -> color[square] == side).forEach(this::isPawn);
         king.genCastles();  // Génère les mouvements de roque possibles
         pawn.genEnpassant();  // Génère les prises en passant possibles
     }
@@ -118,53 +109,23 @@ public class Board implements Constants {
 
     private void generateSlidingPieceMoves(int pieceType, int square) {
         Piece piece = pieceMap.get(pieceType);
-        if (piece != null) {
-            for (int direction = 0; direction < offsets[pieceType]; ++direction) {
-                piece.generateMovesInDirection(square, direction);
-            }
-        } else {
-            throw new IllegalArgumentException("Type de pièce non valide : " + pieceType);
-        }
+        if (piece != null) for (int direction = 0; direction < offsets[pieceType]; ++direction)
+            piece.generateMovesInDirection(square, direction);
+        else throw new IllegalArgumentException("Type de pièce non valide : " + pieceType);
     }
 
-    /**
-     * Gère le cas où la case est occupée.
-     *
-     * @param fromSquare La case de départ.
-     * @param toSquare   La case d'arrivée.
-     */
     void handleOccupiedSquare(int fromSquare, int toSquare) {
         if (isOpponentPiece(color, xside, toSquare)) addMove(fromSquare, toSquare, 1);  // Capture
     }
 
-    /**
-     * Vérifie si le mouvement est une promotion de pawn.
-     *
-     * @param moveFlags         Les drapeaux du mouvement.
-     * @param destinationSquare La case de destination.
-     * @return true si c'est un mouvement de promotion, sinon false.
-     */
     private boolean isPromotionMove(int moveFlags, int destinationSquare) {
         return isPromotionFlagSet(moveFlags) && isOnPromotionRank(destinationSquare);
     }
 
-    /**
-     * Vérifie si la case de destination est sur la rangée de promotion.
-     *
-     * @param destinationSquare La case de destination.
-     * @return true si la case est sur la rangée de promotion, sinon false.
-     */
     private boolean isOnPromotionRank(int destinationSquare) {
         return side == LIGHT ? destinationSquare >= A8 && destinationSquare <= H8 : destinationSquare >= A1 && destinationSquare <= H1;
     }
 
-    /**
-     * Ajoute un mouvement standard (non promotion) à la liste des mouvements.
-     *
-     * @param fromSquare La case de départ.
-     * @param toSquare   La case d'arrivée.
-     * @param moveFlags  Les informations supplémentaires sur le mouvement.
-     */
     private void addStandardMove(int fromSquare, int toSquare, int moveFlags) {
         pseudomoves.add(new Move((byte) fromSquare, (byte) toSquare, (byte) 0, (byte) moveFlags));
     }
@@ -172,5 +133,10 @@ public class Board implements Constants {
     void addMove(int from, int to, int bits) {
         if (isPromotionMove(bits, to)) pawn.gen_promote(from, to, bits);
         else addStandardMove(from, to, bits);
+    }
+
+    private void isPawn(int square) {
+        if (piece[square] == PAWN) pawn.generatePawnMoves(square);
+        else generatePieceMoves(square);
     }
 }
