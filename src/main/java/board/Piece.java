@@ -12,7 +12,7 @@ public abstract class Piece {
     }
 
     public static int getNextSquare(int currentSquare, int pieceType, int direction) {
-        return mailbox[mailbox64[currentSquare] + offset[pieceType][direction]];
+        return MAILBOX[MAILBOX64[currentSquare] + OFFSET[pieceType][direction]];
     }
 
     void generateMovesInDirection(int square, int direction) {

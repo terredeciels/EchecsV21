@@ -180,7 +180,7 @@ public class FenToBoard implements Constants {
 
     public static int fenCharToStone(char ch) {
         for (int stone = MIN_STONE; stone <= MAX_STONE; stone++) {
-            if (fenChars[stone - MIN_STONE] == ch) {
+            if (FEN_CHARS[stone - MIN_STONE] == ch) {
                 return stone;
             }
         }
@@ -221,7 +221,7 @@ public class FenToBoard implements Constants {
 
     public static char stoneToFenChar(int stone) {
         if (stone >= MIN_STONE && stone <= MAX_STONE) {
-            return fenChars[stone - MIN_STONE];
+            return FEN_CHARS[stone - MIN_STONE];
         } else {
             return '?';
         }

@@ -1,5 +1,6 @@
 package board;
 
+import static board.Constants.CASTLE_MASK;
 import static board.Constants.PROMOTION_FLAG;
 
 /**
@@ -80,7 +81,7 @@ public class Move {
         board.um.ep = board.ep;
         board.um.fifty = board.fifty;
 
-        board.castle &= Constants.castle_mask[from] & Constants.castle_mask[to];
+        board.castle &= CASTLE_MASK[from] & CASTLE_MASK[to];
 
         if ((bits & 8) != 0) board.ep = board.side == Constants.LIGHT ? to + 8 : to - 8;
         else board.ep = -1;

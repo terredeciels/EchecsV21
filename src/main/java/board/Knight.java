@@ -3,7 +3,7 @@ package board;
 import static board.Board.isOccupied;
 import static board.Board.isOutOfBounds;
 import static board.Constants.KNIGHT;
-import static board.Constants.offsets;
+import static board.Constants.OFFSETS;
 
 public class Knight extends Piece {
 
@@ -15,7 +15,7 @@ public class Knight extends Piece {
 
 
     public void generateMovesInDirection(int square) {
-        for (int direction = 0; direction < offsets[KNIGHT]; ++direction) {
+        for (int direction = 0; direction < OFFSETS[KNIGHT]; ++direction) {
             int currentSquare = getNextSquare(square, KNIGHT, direction);
             if (isOutOfBounds(currentSquare)) continue;
             if (isOccupied(board.color, currentSquare)) {

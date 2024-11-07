@@ -11,24 +11,13 @@ import static java.lang.System.arraycopy;
 import static java.util.stream.IntStream.range;
 
 public class Board implements Constants {
-
-    public static final int BOARD_SIZE = 64;
-    private final Map<Integer, Piece> pieceMap = new HashMap<>();
-    // Tableaux représentant les couleurs et les pièces sur l'échiquier
-    public int[] color = new int[BOARD_SIZE];
-    public int[] piece = new int[BOARD_SIZE];
-    // Informations sur l'état de la partie
-    public int side;  // Joueur courant
-    public int xside;  // Joueur adverse
-    public int castle;  // Droit de roque
-    public int ep;  // Case de prise en passant
-    public int halfMoveClock;
-    public int plyNumber;
-    public int fifty;
-    public List<Move> pseudomoves = new ArrayList<>();  // Liste des pseudo-mouvements
-    public UndoMove um = new UndoMove();  // Historique des mouvements
-    public Pawn pawn;  // Classe pour les mouvements des pions
-    public King king;  // Classe pour les mouvements du king
+    public final Map<Integer, Piece> pieceMap = new HashMap<>();
+    public int[] color = new int[Constants.BOARD_SIZE], piece = new int[Constants.BOARD_SIZE];
+    public int side, xside, castle, ep, halfMoveClock, plyNumber, fifty;
+    public List<Move> pseudomoves = new ArrayList<>();
+    public UndoMove um = new UndoMove();
+    public Pawn pawn;
+    public King king;
     public Rook rook;
     public Bishop bishop;
     public Queen queen;
@@ -47,8 +36,8 @@ public class Board implements Constants {
 
     public Board(Board board) {
         // Copy arrays
-        arraycopy(board.color, 0, color, 0, BOARD_SIZE);
-        arraycopy(board.piece, 0, piece, 0, BOARD_SIZE);
+        arraycopy(board.color, 0, color, 0, Constants.BOARD_SIZE);
+        arraycopy(board.piece, 0, piece, 0, Constants.BOARD_SIZE);
 
         // Copy primitive fields
         side = board.side;
@@ -79,7 +68,7 @@ public class Board implements Constants {
     }
 
     public void generateMoves() {
-        range(0, BOARD_SIZE).filter(square -> color[square] == side).forEach(this::isPawn);
+        range(0, Constants.BOARD_SIZE).filter(square -> color[square] == side).forEach(this::isPawn);
         king.genCastles();  // Génère les mouvements de roque possibles
         pawn.genEnpassant();  // Génère les prises en passant possibles
     }
@@ -105,7 +94,7 @@ public class Board implements Constants {
 
     private void generateSlidingPieceMoves(int pieceType, int square) {
         Piece piece = pieceMap.get(pieceType);
-        if (piece != null) for (int direction = 0; direction < offsets[pieceType]; ++direction)
+        if (piece != null) for (int direction = 0; direction < OFFSETS[pieceType]; ++direction)
             piece.generateMovesInDirection(square, direction);
         else throw new IllegalArgumentException("Type de pièce non valide : " + pieceType);
     }
