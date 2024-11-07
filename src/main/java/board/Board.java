@@ -36,42 +36,38 @@ public class Board implements Constants {
 
 
     public Board() {
-
-        pawn = new Pawn(this);
-        king = new King(this);
-        rook = new Rook(this);
-        bishop = new Bishop(this);
-        queen = new Queen(this);
+        // Initialize pieces and add relevant ones to pieceMap
+        pieceMap.put(KING, king = new King(this));
+        pieceMap.put(QUEEN, queen = new Queen(this));
+        pieceMap.put(ROOK, rook = new Rook(this));
+        pieceMap.put(BISHOP, bishop = new Bishop(this));
         knight = new Knight(this);
-
-        pieceMap.put(KING, king);
-        pieceMap.put(QUEEN, queen);
-        pieceMap.put(ROOK, rook);
-        pieceMap.put(BISHOP, bishop);
-
+        pawn = new Pawn(this);
     }
 
     public Board(Board board) {
+        // Copy arrays
         arraycopy(board.color, 0, color, 0, BOARD_SIZE);
         arraycopy(board.piece, 0, piece, 0, BOARD_SIZE);
+
+        // Copy primitive fields
         side = board.side;
         xside = board.xside;
         castle = board.castle;
         ep = board.ep;
         fifty = board.fifty;
+
+        // Initialize move list and undo move
         pseudomoves = new ArrayList<>();
         um = new UndoMove();
 
-        pawn = new Pawn(this);
-        king = new King(this);
-        rook = new Rook(this);
-        bishop = new Bishop(this);
-        queen = new Queen(this);
+        // Initialize pieces and add relevant ones to pieceMap
+        pieceMap.put(KING, king = new King(this));
+        pieceMap.put(QUEEN, queen = new Queen(this));
+        pieceMap.put(ROOK, rook = new Rook(this));
+        pieceMap.put(BISHOP, bishop = new Bishop(this));
         knight = new Knight(this);
-        pieceMap.put(KING, king);
-        pieceMap.put(QUEEN, queen);
-        pieceMap.put(ROOK, rook);
-        pieceMap.put(BISHOP, bishop);
+        pawn = new Pawn(this);
     }
 
     public static boolean isOccupied(int[] boardColors, int square) {
