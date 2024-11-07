@@ -12,12 +12,12 @@ import static java.util.stream.IntStream.range;
 
 public class Board implements Constants {
     public final Map<Integer, Piece> pieceMap = new HashMap<>();
+    public final King king;
+    private final Pawn pawn;
     public int[] color = new int[Constants.BOARD_SIZE], piece = new int[Constants.BOARD_SIZE];
     public int side, xside, castle, ep, halfMoveClock, plyNumber, fifty;
     public List<Move> pseudomoves = new ArrayList<>();
     public UndoMove um = new UndoMove();
-    public Pawn pawn;
-    public King king;
     public Rook rook;
     public Bishop bishop;
     public Queen queen;

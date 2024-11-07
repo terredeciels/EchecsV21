@@ -33,7 +33,7 @@ public class Move {
             int from;
             int to;
 
-            if (board.king.in_check(board.side)) return false;
+            if (board.king.inCheck(board.side)) return false;
             switch (this.to) {
                 case 62:
                     if (board.color[Constants.F1] != Constants.EMPTY || board.color[Constants.G1] != Constants.EMPTY || board.king.isAttacked(Constants.F1, board.xside) || board.king.isAttacked(Constants.G1, board.xside)) {
@@ -102,7 +102,7 @@ public class Move {
 
         board.side ^= 1;
         board.xside ^= 1;
-        if (board.king.in_check(board.xside)) {
+        if (board.king.inCheck(board.xside)) {
             board.um.takeback(board);
             return false;
         }

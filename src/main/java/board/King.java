@@ -13,23 +13,22 @@ class King extends Piece {
     }
 
     public void genCastles() {
-        if (board.side == LIGHT) {
-            if ((board.castle & 1) != 0) board.addMove(Constants.E1, Constants.G1, 2);
-            if ((board.castle & 2) != 0) board.addMove(Constants.E1, Constants.C1, 2);
-        } else {
-            if ((board.castle & 4) != 0) board.addMove(Constants.E8, Constants.G8, 2);
-            if ((board.castle & 8) != 0) board.addMove(Constants.E8, Constants.C8, 2);
+        int[][] castleMoves = {{LIGHT, 1, E1, G1, 2}, {LIGHT, 2, E1, C1, 2}, {DARK, 4, E8, G8, 2}, {DARK, 8, E8, C8, 2}};
+        for (int[] move : castleMoves) {
+            if (board.side == move[0] && (board.castle & move[1]) != 0) {
+                board.addMove(move[2], move[3], move[4]);
+            }
         }
     }
 
-    public boolean in_check(int s) {
-        return range(0, Constants.BOARD_SIZE)
-                .filter(i -> board.piece[i] == KING && board.color[i] == s)
-                .anyMatch(i -> isAttacked(i, s ^ 1));
+    public boolean inCheck(int side) {
+        return range(0, BOARD_SIZE)
+                .filter(i -> board.piece[i] == KING && board.color[i] == side)
+                .anyMatch(i -> isAttacked(i, side ^ 1));
     }
 
     public boolean isAttacked(int sqTarget, int side) {
-        return range(0, Constants.BOARD_SIZE)
+        return range(0, BOARD_SIZE)
                 .filter(sq -> board.color[sq] == side)
                 .anyMatch(sq -> isAttackedByPiece(sq, sqTarget, board.piece[sq], side));
     }
@@ -39,7 +38,8 @@ class King extends Piece {
             int offset = (side == LIGHT) ? -8 : 8;
             return (sq & 7) != 0 && sq + offset - 1 == sqTarget ||
                     (sq & 7) != 7 && sq + offset + 1 == sqTarget;
-        } else return range(0, OFFSETS[pieceType])
+        }
+        return range(0, OFFSETS[pieceType])
                 .anyMatch(o -> isAttackedByOffset(sq, sqTarget, pieceType, o));
     }
 
@@ -47,24 +47,19 @@ class King extends Piece {
         int sqIndex = sq;
         while ((sqIndex = MAILBOX[MAILBOX64[sqIndex] + OFFSET[pieceType][offsetIndex]]) != -1) {
             if (sqIndex == sqTarget) return true;
-            if (board.color[sqIndex] != Constants.EMPTY || !SLIDE[pieceType]) break;
+            if (board.color[sqIndex] != EMPTY || !SLIDE[pieceType]) break;
         }
         return false;
     }
 
-
     public void generateMovesInDirection(int square, int direction) {
-        int currentSquare = square;
-
-// Logique pour le roi uniquement
-        currentSquare = getNextSquare(currentSquare, KING, direction);
+        int currentSquare = getNextSquare(square, KING, direction);
         if (!isOutOfBounds(currentSquare)) {
             if (isOccupied(board.color, currentSquare)) {
                 board.handleOccupiedSquare(square, currentSquare);
             } else {
-                board.addMove(square, currentSquare, 0);  // Ajouter le mouvement si la case est libre
+                board.addMove(square, currentSquare, 0);
             }
         }
-
     }
 }

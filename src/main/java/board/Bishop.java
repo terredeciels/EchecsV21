@@ -13,16 +13,14 @@ public class Bishop extends Piece {
     }
 
     public void generateMovesInDirection(int square, int direction) {
-        int currentSquare = square;
-        while (true) {
-            currentSquare = getNextSquare(currentSquare, BISHOP, direction);
-            if (isOutOfBounds(currentSquare)) break;
+        for (int currentSquare = getNextSquare(square, BISHOP, direction);
+             !isOutOfBounds(currentSquare);
+             currentSquare = getNextSquare(currentSquare, BISHOP, direction)) {
             if (isOccupied(board.color, currentSquare)) {
                 board.handleOccupiedSquare(square, currentSquare);
                 break;
             }
             board.addMove(square, currentSquare, 0);  // Ajouter le mouvement si la case est libre
-            // Le fou peut toujours glisser, donc on continue la boucle
         }
     }
 }
