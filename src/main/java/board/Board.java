@@ -1,16 +1,14 @@
 package board;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static board.Move.isPromotionFlagSet;
 import static board.Piece.isOpponentPiece;
 import static java.lang.System.arraycopy;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.IntStream.range;
 
-public class Board implements Constants {
+public class Board implements Constants, IBoard {
     public final Map<Integer, Piece> pieceMap = new HashMap<>();
     public final King king;
     private final Pawn pawn;
@@ -22,7 +20,7 @@ public class Board implements Constants {
     public Bishop bishop;
     public Queen queen;
     public Knight knight;
-
+    private static final Set<Integer> SLIDING_PIECES = Set.of(KING, QUEEN, ROOK, BISHOP);
 
     public Board() {
         // Initialize pieces and add relevant ones to pieceMap
@@ -59,44 +57,31 @@ public class Board implements Constants {
         pawn = new Pawn(this);
     }
 
-    public static boolean isOccupied(int[] boardColors, int square) {
-        return boardColors[square] != EMPTY;
-    }
-
-    public static boolean isOutOfBounds(int square) {
-        return square < 0;
-    }
-
     public void generateMoves() {
         range(0, Constants.BOARD_SIZE).filter(square -> color[square] == side).forEach(this::isPawn);
         king.genCastles();  // Génère les mouvements de roque possibles
         pawn.genEnpassant();  // Génère les prises en passant possibles
     }
 
-    private void generatePieceMoves(int square) {
-        int pieceType = piece[square];
-        switch (pieceType) {
-            case KING:
-            case QUEEN:
-            case ROOK:
-            case BISHOP:
-                generateSlidingPieceMoves(pieceType, square);
-                break;
-
-            case KNIGHT:
-                knight.generateMovesInDirection(square);
-                break;
-
-            default:
-                throw new IllegalArgumentException("Type de pièce invalide: " + pieceType);
-        }
+    private void isPawn(int square) {
+        if (piece[square] == PAWN) pawn.generatePawnMoves(square);
+        else generatePieceMoves(square);
     }
 
+
+    private void generatePieceMoves(int square) {
+        int pieceType = piece[square];
+        if (SLIDING_PIECES.contains(pieceType)) generateSlidingPieceMoves(pieceType, square);
+        else if (pieceType == KNIGHT) knight.generateMovesInDirection(square);
+    }
+
+
     private void generateSlidingPieceMoves(int pieceType, int square) {
-        Piece piece = pieceMap.get(pieceType);
-        if (piece != null) for (int direction = 0; direction < OFFSETS[pieceType]; ++direction)
-            piece.generateMovesInDirection(square, direction);
-        else throw new IllegalArgumentException("Type de pièce non valide : " + pieceType);
+       ofNullable(pieceMap.get(pieceType)).ifPresent(piece ->
+                        range(0, OFFSETS[pieceType]).forEach(direction ->
+                                piece.generateMovesInDirection(square, direction)
+                        )
+                );
     }
 
     void handleOccupiedSquare(int fromSquare, int toSquare) {
@@ -120,8 +105,5 @@ public class Board implements Constants {
         else addStandardMove(from, to, bits);
     }
 
-    private void isPawn(int square) {
-        if (piece[square] == PAWN) pawn.generatePawnMoves(square);
-        else generatePieceMoves(square);
-    }
+
 }

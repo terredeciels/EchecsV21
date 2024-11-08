@@ -1,7 +1,5 @@
 package board;
 
-import static board.Board.isOccupied;
-import static board.Board.isOutOfBounds;
 import static board.Constants.BISHOP;
 
 public class Bishop extends Piece {
@@ -14,9 +12,9 @@ public class Bishop extends Piece {
 
     public void generateMovesInDirection(int square, int direction) {
         for (int currentSquare = getNextSquare(square, BISHOP, direction);
-             !isOutOfBounds(currentSquare);
+             !IBoard.isOutOfBounds(currentSquare);
              currentSquare = getNextSquare(currentSquare, BISHOP, direction)) {
-            if (isOccupied(board.color, currentSquare)) {
+            if (IBoard.isOccupied(board.color, currentSquare)) {
                 board.handleOccupiedSquare(square, currentSquare);
                 break;
             }

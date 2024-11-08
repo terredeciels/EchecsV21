@@ -1,7 +1,5 @@
 package board;
 
-import static board.Board.isOccupied;
-import static board.Board.isOutOfBounds;
 import static board.Constants.ROOK;
 
 public class Rook extends Piece {
@@ -18,8 +16,8 @@ public class Rook extends Piece {
         int currentSquare = square;
         while (true) {
             currentSquare = getNextSquare(currentSquare, ROOK, direction);
-            if (isOutOfBounds(currentSquare)) break;
-            if (isOccupied(board.color, currentSquare)) {
+            if (IBoard.isOutOfBounds(currentSquare)) break;
+            if (IBoard.isOccupied(board.color, currentSquare)) {
                 board.handleOccupiedSquare(square, currentSquare);
                 break;
             }

@@ -1,7 +1,5 @@
 package board;
 
-import static board.Board.isOccupied;
-import static board.Board.isOutOfBounds;
 import static board.Constants.*;
 import static java.util.stream.IntStream.range;
 
@@ -54,8 +52,8 @@ class King extends Piece {
 
     public void generateMovesInDirection(int square, int direction) {
         int currentSquare = getNextSquare(square, KING, direction);
-        if (!isOutOfBounds(currentSquare)) {
-            if (isOccupied(board.color, currentSquare)) {
+        if (!IBoard.isOutOfBounds(currentSquare)) {
+            if (IBoard.isOccupied(board.color, currentSquare)) {
                 board.handleOccupiedSquare(square, currentSquare);
             } else {
                 board.addMove(square, currentSquare, 0);
